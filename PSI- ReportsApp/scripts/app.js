@@ -2,7 +2,7 @@
  * Created by hisp on 1/12/15.
  */
 
-var bidReportsApp = angular.module('bidReportsApp',['ui.bootstrap',
+var msfReportsApp = angular.module('msfReportsApp',['ui.bootstrap',
     'ngRoute',
     'ngCookies',
     'ngSanitize',
@@ -12,7 +12,7 @@ var bidReportsApp = angular.module('bidReportsApp',['ui.bootstrap',
     'd2Filters',
     'd2Services',
     'pascalprecht.translate',
-    'bidReportsAppServices'
+    'msfReportsAppServices'
 ])
 
 .config(function($routeProvider,$translateProvider){
