@@ -52,15 +52,15 @@
 
 </div>
 
-<div id ="divId">
-    <table id="tableid" class="table-bordered" style="float:left" >
+<div id ="divId" class="container">
+    <table id="tableid" class="table table-hover">
         <tr>
             <th colspan="{{program.programTrackedEntityAttributes.length+2}}">{{attribute}}</th>
             <th ng-repeat="ps in program.programStages"
                 colspan="{{ps.programStageDataElements.length+2}}">{{ps.name}}</th>
 
         </tr>
-        <tr>
+        <tr style="background-color:antiquewhite">
             <th ng-repeat="enrol in enrollment">{{enrol}}</th>
             <th ng-repeat="attr in program.programTrackedEntityAttributes">{{attr.displayName}}</th>
             <th ng-repeat="de in psDEs">{{de.dataElement.name}}</th>
