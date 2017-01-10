@@ -42,9 +42,10 @@ msfReportsApp
         //initially load tree
         selection.load();
 
+        getAllPrograms();
+
         // Listen for OU changes
         selection.setListenerFunction(function(){
-            getAllPrograms();
             $scope.selectedOrgUnitUid = selection.getSelected();
             loadPrograms();
         },false);
@@ -56,7 +57,7 @@ msfReportsApp
                 });
             });
         }
-        getAllPrograms = function(){
+        function getAllPrograms(){
             MetadataService.getAllPrograms().then(function(prog) {
                 $scope.allPrograms = prog.programs;
                 $scope.programs = [];
@@ -86,6 +87,10 @@ msfReportsApp
             saveAs(blob, "Report.xls");
 
         };
+
+        $scope.exportData = function(program){
+            exportData($scope.date.startDate,$scope.date.endDate,program,$scope.selectedOrgUnit);
+        }
 
        $scope.generateReport = function(program){
 
