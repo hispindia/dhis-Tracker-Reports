@@ -74,6 +74,20 @@ request = function(param,callback){
     }
 }
 
-getEventsByTEIAndProgram = function(tei,program,ou){
+getTEAttributes = function(){
+    var def = $.Deferred();
+    $.ajax({
+        type: "GET",
+        dataType: "json",
+        contentType: "application/json",
+        url: '../../trackedEntityAttributes?fields=id,name,valueType,attributeValues[attribute[id,code],value]&paging=false',
+        success: function (data) {
+            def.resolve(data.trackedEntityAttributes);
+        },
+        error : function(a,b,c){
+            def.resolve(null);
 
+        }
+    });
+    return def;
 }

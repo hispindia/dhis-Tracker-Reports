@@ -4,6 +4,7 @@
 
 function exportData(startDate,endDate,program,ou){
 const dateFormat = "YYYY-MM-DD";
+    var anonymousAttributes = {};
 var counter = 0;
     var jsonData = {
         trackedEntityInstance : [],
@@ -11,12 +12,30 @@ var counter = 0;
         events: []
     };
 
-    //get all TEI
-    getTEIBetweenDateAndProgram(moment(startDate).format(dateFormat),moment(endDate).format(dateFormat),program.id,ou.id)
-        .then(function(teis){
-            jsonData.trackedEntityInstance = teis;
-            counterCallback();
-    });
+    getTEAttributes().then(function(tea){
+
+        for (var key in tea){
+            if (tea[key].attributeValues.length > 0){
+                var val = extractMetaAttributeValue(tea[key].attributeValues,Anonymous_Attribute_Code);
+                if (val){
+                    anonymousAttributes[tea[key].id] = tea[key];
+                }
+            }
+        }
+
+        //get all TEI
+        getTEIBetweenDateAndProgram(moment(startDate).format(dateFormat),moment(endDate).format(dateFormat),program.id,ou.id)
+            .then(function(teis){
+
+                for (var i=0;i<teis.length;i++){
+                    anonymizeTEAS(anonymousAttributes,teis[i].attributes);
+                }
+
+                jsonData.trackedEntityInstance = teis;
+                counterCallback();
+            });
+    })
+
 
     getEnrollmentsBetweenDateAndProgram(moment(startDate).format(dateFormat),moment(endDate).format(dateFormat),program.id,ou.id).then(function(enrollments){
         jsonData.enrollments = enrollments;
@@ -36,6 +55,27 @@ var counter = 0;
     }
 }
 
+function anonymizeTEAS(map,teas){
+
+    for (key in map){
+        for (var i=0;i<teas.length;i++){
+            if (teas[i].attribute == key){
+                var attr = map[key];
+                switch(attr.valueType){
+                    case "TEXT":
+                            teas[i].value = "ANONYMOUS";
+                        break
+                    case "PHONE_NUMBER":
+                        teas[i].value = "0000000000";
+                        break
+                    case "DATE" :
+                        teas[i].value = "1970-01-01";
+                        break
+                }
+            }
+        }
+    }
+}
 function download(text, name, type) {
     var a = document.createElement("a");
     var file = new Blob([text], {type: type});

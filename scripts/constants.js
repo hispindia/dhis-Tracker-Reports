@@ -2,6 +2,7 @@
  * Created by harsh on 2/12/16.
  */
 
+    const Anonymous_Attribute_Code = "Anonymous?";
 const SQLQUERY_TEI_ATTR = "select tei.uid tei ,min(tea.name) attrname,tea.uid attruid,min(teav.value) attrvalue,ou.name,tei.created,pi.enrollmentdate enrolldate\
  from programstageinstance psi\
  INNER JOIN programinstance pi ON  psi.programinstanceid = pi.programinstanceid\
