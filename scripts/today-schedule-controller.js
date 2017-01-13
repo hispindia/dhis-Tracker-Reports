@@ -89,7 +89,9 @@ msfReportsApp
         };
 
         $scope.exportData = function(program){
-            exportData($scope.date.startDate,$scope.date.endDate,program,$scope.selectedOrgUnit);
+         //   exportData($scope.date.startDate,$scope.date.endDate,program,$scope.selectedOrgUnit);
+            exportData($scope.startdateSelected,$scope.enddateSelected,program,$scope.selectedOrgUnit);
+
         }
 
        $scope.generateReport = function(program){
