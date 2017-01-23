@@ -196,7 +196,7 @@ msfReportsApp
             var teiPsEventMap = [];
             var teiPsEventDeMap = [];
             var teiEventMap = [];
-
+            var metaAttrArr=[];
 
             // For attribute
             const index_tei = 0;
@@ -216,6 +216,7 @@ msfReportsApp
 
 
             for (var i=0;i<attrData.height;i++){
+
                 var teiuid = attrData.rows[i][index_tei];
                 var attruid = attrData.rows[i][index_attruid];
                 var attrvalue = attrData.rows[i][index_attrvalue];
@@ -223,7 +224,43 @@ msfReportsApp
                 var enrollDate = attrData.rows[i][index_enrollmentDate]; // enrollment date
                 enrollDate = enrollDate.substring(0, 10);
 
-                if (teiWiseAttrMap[teiuid] == undefined){
+                anonymous(0,attrData);
+
+                function completeAnonymous(index,data){
+                    anonymous(index+1,data);
+
+                }
+                function anonymous(index, attrData){
+
+                    if (index == attrData.rows.length) {
+                       // def.resolve("");
+                        return
+                    }
+
+                //    var def = $.Deferred();
+                    $.ajax({
+                        async:false,
+                        type: "GET",
+                        dataType: "json",
+                        contentType: "application/json",
+                        url: '../../trackedEntityAttributes/'+attruid+'.json?fields=*,attributeValues[*,attribute[id,name,code]]&paging=false',
+                        success: function (data) {
+                            // def.resolve(data);
+                            if (data.attributeValues.length > 0) {
+                                for (var k = 0; k < data.attributeValues.length; k++) {
+                                    if (data.attributeValues[k].attribute.code == 'Anonymous?'&& data.attributeValues[k].value == 'true')
+                                    {
+                                        attrvalue = 'ANONYMOUS';
+                                    }
+                                }
+                            }
+                        }
+                    });
+                    completeAnonymous(index,attrData);
+                   // return def;
+                }
+
+                    if (teiWiseAttrMap[teiuid] == undefined){
                     teiWiseAttrMap[teiuid] = [];
                 }
                 teiWiseAttrMap[teiuid].push(attrData.rows[i]);
