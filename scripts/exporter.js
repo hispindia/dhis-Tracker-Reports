@@ -6,6 +6,13 @@ function exportData(startDate,endDate,program,ou){
 const dateFormat = "YYYY-MM-DD";
     var anonymousAttributes = {};
 var counter = 0;
+    //var sqlviewTEI = "h3EGc4D0D8F";
+    //var sqlviewEvent = "WtG1zARPfGC";
+    //var sqlviewEnrol = "FtARET1400b";
+
+    var sqlviewTEI = "gKoyecyesIy";
+    var sqlviewEvent = "wP1mRygtI6v";
+    var sqlviewEnrol = "mpJURzehHtv";
     var jsonData = {
         trackedEntityInstance : [],
         enrollments : [],
@@ -25,26 +32,78 @@ var counter = 0;
 
         //get all TEI
         getTEIBetweenDateAndProgram(moment(startDate).format(dateFormat),moment(endDate).format(dateFormat),program.id,ou.id)
-            .then(function(teis){
+            .then(function(teis) {
 
-                for (var i=0;i<teis.length;i++){
-                    anonymizeTEAS(anonymousAttributes,teis[i].attributes);
-                }
+                getTEIBetweenDateAndProgramSQLView(moment(startDate).format(dateFormat), moment(endDate).format(dateFormat), program.id, ou.id,sqlviewTEI)
+                    .then(function (teissql) {
 
-                jsonData.trackedEntityInstance = teis;
-                counterCallback();
+                        for (var i = 0; i < teis.length; i++) {
+                            anonymizeTEAS(anonymousAttributes, teis[i].attributes);
+                        }
+                        if(teissql.length>0){
+                            for (var i = 0; i < teis.length; i++) {
+
+                                for(var j=0; j<teissql.length; j++) {
+                                    if (teissql[j][0] == teis[i].trackedEntityInstance) {
+
+                                        jsonData.trackedEntityInstance.push(teis[i]);
+
+                                    }
+                                }
+                            }
+
+                        }
+                        //jsonData.trackedEntityInstance = teis;
+                        counterCallback();
+                    });
             });
     })
 
 
-    getEnrollmentsBetweenDateAndProgram(moment(startDate).format(dateFormat),moment(endDate).format(dateFormat),program.id,ou.id).then(function(enrollments){
-        jsonData.enrollments = enrollments;
-        counterCallback();
+    getEnrollmentsBetweenDateAndProgram(moment(startDate).format(dateFormat),moment(endDate).format(dateFormat),program.id,ou.id).then(function(enrollments) {
+
+        getEnrollmentsBetweenDateAndProgramSQLView(moment(startDate).format(dateFormat), moment(endDate).format(dateFormat), program.id, ou.id, sqlviewEnrol)
+            .then(function (enrollmentssql) {
+
+                if(enrollmentssql.length>0){
+                    for (var i = 0; i < enrollments.length; i++) {
+
+                        for(var j=0; j<enrollmentssql.length; j++) {
+                            if (enrollmentssql[j][0] == enrollments[i].enrollment) {
+
+                                jsonData.enrollments.push(enrollments[i]);
+
+                            }
+                        }
+                    }
+
+                }
+              //  jsonData.enrollments = enrollments;
+                counterCallback();
+            });
     });
 
-    getEventsBetweenDateAndProgram(moment(startDate).format(dateFormat),moment(endDate).format(dateFormat),program.id,ou.id).then(function(events){
-        jsonData.events = events;
-        counterCallback();
+    getEventsBetweenDateAndProgram(moment(startDate).format(dateFormat),moment(endDate).format(dateFormat),program.id,ou.id).then(function(events) {
+
+        getEventsBetweenDateAndProgramSQLView(moment(startDate).format(dateFormat), moment(endDate).format(dateFormat), program.id, ou.id, sqlviewEvent)
+            .then(function (eventssql) {
+
+                if(eventssql.length>0){
+                    for (var i = 0; i < events.length; i++) {
+
+                        for(var j=0; j<eventssql.length; j++) {
+                            if (eventssql[j][0] == events[i].event) {
+
+                                jsonData.events.push(events[i]);
+
+                            }
+                        }
+                    }
+
+                }
+             //   jsonData.events = events;
+                counterCallback();
+            });
     });
 
     function counterCallback(){
