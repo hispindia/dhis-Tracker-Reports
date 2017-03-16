@@ -26,7 +26,7 @@ msfReportsApp
 //PSI
         //const SQLVIEW_TEI_PS =  "FcXYoEGIQIR";
         // const SQLVIEW_TEI_ATTR = "WMIMrJEYUxl";
-
+        var def = $.Deferred();
         //MSF
         const SQLVIEW_TEI_PS =  "Ysi6iyNK1Ha";
         const SQLVIEW_TEI_ATTR = "GoPX942y3eV";
@@ -151,10 +151,14 @@ msfReportsApp
                         MetadataService.getSQLView(SQLViewsName2IdMap[SQLQUERY_TEI_ATTR_NAME], param).then(function (attrData) {
                             $scope.attrData = attrData;
 
-                            arrangeDataX($scope.stageData, $scope.attrData);
+                            MetadataService.getALLAttributes().then(function (allattr) {
+                                $scope.allattr = allattr;
+
+
+                                arrangeDataX($scope.stageData, $scope.attrData, $scope.allattr);
+                            })
                         })
                     })
-
 
        }
 
@@ -177,7 +181,8 @@ msfReportsApp
 
 
         }
-        function arrangeDataX(stageData,attrData){
+
+        function arrangeDataX(stageData,attrData,allattr){
 
             var report = [{
                 teiuid : ""
@@ -224,7 +229,22 @@ msfReportsApp
                 var enrollDate = attrData.rows[i][index_enrollmentDate]; // enrollment date
                 enrollDate = enrollDate.substring(0, 10);
 
-                anonymous(0,attrData);
+               // if (allattr.length > 0) {
+                for(var m=0; m<allattr.trackedEntityAttributes.length; m++) {
+
+                    if (attruid == allattr.trackedEntityAttributes[m].id) {
+
+                       // if (allattr.trackedEntityAttributes.length > 0) {
+                            for (var k = 0; k < allattr.trackedEntityAttributes[m].attributeValues.length; k++) {
+                                if (allattr.trackedEntityAttributes[m].attributeValues[k].attribute.code == 'Anonymous?' && allattr.trackedEntityAttributes[m].attributeValues[k].value == 'true') {
+                                    attrvalue = 'PRIVATE';
+                                }
+                           // }
+                        }
+                    }
+                }
+
+            /*    anonymous(0,attrData);
 
                 function completeAnonymous(index,data){
                     anonymous(index+1,data);
@@ -233,7 +253,7 @@ msfReportsApp
                 function anonymous(index, attrData){
 
                     if (index == attrData.rows.length) {
-                       // def.resolve("");
+                        def.resolve("");
                         return
                     }
 
@@ -259,7 +279,7 @@ msfReportsApp
                     completeAnonymous(index,attrData);
                    // return def;
                 }
-
+*/
                     if (teiWiseAttrMap[teiuid] == undefined){
                     teiWiseAttrMap[teiuid] = [];
                 }

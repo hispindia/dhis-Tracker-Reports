@@ -45,6 +45,21 @@ var trackerReportsAppServices = angular.module('trackerReportsAppServices', [])
                    }
                });
                return def;
+           },
+
+           getALLAttributes : function(){
+               var def = $.Deferred();
+               $.ajax({
+                   type: "GET",
+                   dataType: "json",
+                   contentType: "application/json",
+                   url: '../../trackedEntityAttributes.json?fields=id,name,attributeValues[*,attribute[id,name,code]]&paging=false',
+                   success: function (data) {
+                       def.resolve(data);
+                   }
+               });
+               return def;
            }
+
        }
     });
