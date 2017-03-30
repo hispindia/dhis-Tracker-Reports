@@ -10,7 +10,7 @@ getTEIBetweenDateAndProgram = function(startDate,endDate,program,ou){
         dataType: "json",
         contentType: "application/json",
       //  url: '../../trackedEntityInstances?program='+program+'&startDate='+startDate+'&endDate='+endDate+'&ou='+ou+'&ouMode=DESCENDANTS&paging=false',
-        url: '../../trackedEntityInstances?program='+program+'&ou='+ou+'&ouMode=DESCENDANTS&paging=false',
+        url: '../../trackedEntityInstances?program='+program+'&ou='+ou+'&ouMode=DESCENDANTS&skipPaging=true',
         success: function (data) {
             def.resolve(data.trackedEntityInstances);
         },
@@ -50,7 +50,7 @@ getEnrollmentsBetweenDateAndProgram = function(startDate,endDate,program,ou){
         dataType: "json",
         contentType: "application/json",
         //url: '../../enrollments?program='+program+'&startDate='+startDate+'&endDate='+endDate+'&ou='+ou+'&ouMode=DESCENDANTS&paging=false',
-        url: '../../enrollments?program='+program+'&ou='+ou+'&ouMode=DESCENDANTS&paging=false',
+        url: '../../enrollments?program='+program+'&ou='+ou+'&ouMode=DESCENDANTS&skipPaging=true',
         success: function (data) {
             def.resolve(data.enrollments);
         },

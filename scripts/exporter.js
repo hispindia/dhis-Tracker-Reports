@@ -6,13 +6,13 @@ function exportData(startDate,endDate,program,ou){
 const dateFormat = "YYYY-MM-DD";
     var anonymousAttributes = {};
 var counter = 0;
-    //var sqlviewTEI = "h3EGc4D0D8F";
-    //var sqlviewEvent = "WtG1zARPfGC";
-    //var sqlviewEnrol = "FtARET1400b";
+    var sqlviewTEI = "PU5yLRnwuux";
+    var sqlviewEvent = "xR624wriSdx";
+    var sqlviewEnrol = "Xq8XCKgX277";
 
-    var sqlviewTEI = "gKoyecyesIy";
-    var sqlviewEvent = "wP1mRygtI6v";
-    var sqlviewEnrol = "mpJURzehHtv";
+  //  var sqlviewTEI = "gKoyecyesIy";
+   // var sqlviewEvent = "wP1mRygtI6v";
+   // var sqlviewEnrol = "mpJURzehHtv";
     var jsonData = {
         trackedEntityInstance : [],
         enrollments : [],
@@ -41,12 +41,12 @@ var counter = 0;
                             anonymizeTEAS(anonymousAttributes, teis[i].attributes);
                         }
                         if(teissql.length>0){
-                            for (var i = 0; i < teis.length; i++) {
+                            for (var i = 0; i < teissql.length; i++) {
 
-                                for(var j=0; j<teissql.length; j++) {
-                                    if (teissql[j][0] == teis[i].trackedEntityInstance) {
+                                for(var j=0; j<teis.length; j++) {
+                                    if (teissql[i][0] == teis[j].trackedEntityInstance) {
 
-                                        jsonData.trackedEntityInstance.push(teis[i]);
+                                        jsonData.trackedEntityInstance.push(teis[j]);
 
                                     }
                                 }
@@ -66,12 +66,12 @@ var counter = 0;
             .then(function (enrollmentssql) {
 
                 if(enrollmentssql.length>0){
-                    for (var i = 0; i < enrollments.length; i++) {
+                    for (var i = 0; i < enrollmentssql.length; i++) {
 
-                        for(var j=0; j<enrollmentssql.length; j++) {
-                            if (enrollmentssql[j][0] == enrollments[i].enrollment) {
+                        for(var j=0; j<enrollments.length; j++) {
+                            if (enrollmentssql[i][0] == enrollments[j].enrollment) {
 
-                                jsonData.enrollments.push(enrollments[i]);
+                                jsonData.enrollments.push(enrollments[j]);
 
                             }
                         }
