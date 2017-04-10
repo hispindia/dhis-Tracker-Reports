@@ -6,13 +6,14 @@ function exportData(startDate,endDate,program,ou){
 const dateFormat = "YYYY-MM-DD";
     var anonymousAttributes = {};
 var counter = 0;
+    //production
     var sqlviewTEI = "PU5yLRnwuux";
     var sqlviewEvent = "xR624wriSdx";
     var sqlviewEnrol = "Xq8XCKgX277";
 
-  //  var sqlviewTEI = "gKoyecyesIy";
-   // var sqlviewEvent = "wP1mRygtI6v";
-   // var sqlviewEnrol = "mpJURzehHtv";
+  //  var sqlviewTEI = "Qz3b134iBM1";
+   // var sqlviewEvent = "zLD7H7mtWf9";
+   // var sqlviewEnrol = "ihnPf5Kpylq";
     var jsonData = {
         trackedEntityInstance : [],
         enrollments : [],
@@ -122,7 +123,7 @@ function anonymizeTEAS(map,teas){
                 var attr = map[key];
                 switch(attr.valueType){
                     case "TEXT":
-                            teas[i].value = "ANONYMOUS";
+                            teas[i].value = "PRIVATE";
                         break
                     case "PHONE_NUMBER":
                         teas[i].value = "0000000000";
